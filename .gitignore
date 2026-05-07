@@ -1,0 +1,46 @@
+# ===========================
+# Environment & Secrets
+# ===========================
+.env
+.env.local
+.env.production
+.env.staging
+
+# ===========================
+# Python
+# ===========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+venv/
+.venv/
+*.whl
+
+# Django
+staticfiles/
+db.sqlite3
+
+# ===========================
+# Node / Frontend
+# ===========================
+node_modules/
+
+# ===========================
+# IDE & Editor
+# ===========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===========================
+# OS
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
