@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Session Request | PathMate</title>
+</head>
+<body style="font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #F8FAFC; color: #0F172A; margin: 0; padding: 40px 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #E2E8F0;">
+        <!-- Header -->
+        <div style="background-color: #FFFFFF; padding: 32px 40px; border-bottom: 1px solid #E2E8F0;">
+            <h1 style="margin: 0; font-size: 24px; color: #0F172A; font-weight: 700; letter-spacing: -0.5px;">PathMate</h1>
+        </div>
+        
+        <!-- Body -->
+        <div style="padding: 40px;">
+            <p style="margin-top: 0; margin-bottom: 24px; font-size: 16px; line-height: 24px; color: #334155;">
+                Hi <strong>{{ mentor_name }}</strong>,
+            </p>
+            <p style="margin-top: 0; margin-bottom: 32px; font-size: 16px; line-height: 24px; color: #334155;">
+                You have received a new session request from <strong>{{ mentee_name }}</strong>.
+            </p>
+
+            {% if message_snippet %}
+            <!-- Message Card -->
+            <div style="background-color: #F8FAFC; border-left: 4px solid #06B6D4; border-radius: 0 8px 8px 0; padding: 24px; margin-bottom: 32px;">
+                <p style="margin: 0; font-size: 15px; line-height: 24px; color: #475569; font-style: italic;">
+                    "{{ message_snippet }}"
+                </p>
+            </div>
+            {% endif %}
+
+            <p style="margin-top: 0; margin-bottom: 32px; font-size: 16px; line-height: 24px; color: #334155;">
+                You can review the request, accept it, and provide a meeting link from your dashboard.
+            </p>
+
+            <!-- Action Button -->
+            <div style="text-align: center;">
+                <a href="{{ dashboard_url }}" style="display: inline-block; background: linear-gradient(135deg, #06B6D4 0%, #34D399 100%); color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 32px; border-radius: 8px; letter-spacing: 0.5px;">
+                    View Request
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="background-color: #F8FAFC; padding: 24px 40px; text-align: center; border-top: 1px solid #E2E8F0;">
+            <p style="margin: 0; font-size: 13px; color: #64748B;">
+                PathMate Mentorship Platform<br>
+                Empowering the next generation.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

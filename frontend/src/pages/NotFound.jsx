@@ -8,7 +8,7 @@ function NotFound() {
       <div className="noise-overlay" />
       <div className="page-content text-center animate-fade-in">
         <h1 className="text-8xl font-bold gradient-text mb-4 tracking-tighter">404</h1>
-        <p className="text-zinc-500 text-lg mb-8">
+        <p className="text-slate-500 text-lg mb-8">
           This page doesn't exist.
         </p>
         <Link

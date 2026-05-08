@@ -23,16 +23,13 @@ function SidebarLayout({ children }) {
   const activeLink = navLinks.find(link => location.pathname === link.path || (link.path !== '/dashboard' && location.pathname.startsWith(link.path)))?.path || '/dashboard'
 
   return (
-    <div className="page-bg h-screen flex text-zinc-100 font-sans overflow-hidden">
+    <div className="page-bg h-screen flex text-slate-900 font-sans overflow-hidden">
       <div className="noise-overlay" />
       <div className="page-content flex flex-1 w-full max-w-screen-2xl mx-auto h-full">
         
         {/* Sidebar */}
-        <aside className="hidden md:flex flex-col w-64 glass-surface border-r border-white/[0.04] p-6 h-screen sticky top-0 z-20 shrink-0">
-          <Link to="/" className="text-2xl font-bold text-white mb-12 tracking-tight flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <span className="text-white text-xs font-black">P</span>
-            </div>
+        <aside className="hidden md:flex flex-col w-64 glass-surface border-r border-slate-200 p-6 h-screen sticky top-0 z-20 shrink-0">
+          <Link to="/" className="text-2xl font-bold text-slate-900 mb-12 tracking-tight block">
             Path<span className="gradient-text">Mate</span>
           </Link>
 
@@ -47,13 +44,13 @@ function SidebarLayout({ children }) {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-250 ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-250 sidebar-link ${
                     isActive
-                      ? 'bg-white/[0.06] text-white shadow-[inset_2px_0_0_#8b5cf6]'
-                      : 'text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.03]'
+                      ? 'sidebar-link-active'
+                      : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
-                  <Icon className={`w-[18px] h-[18px] transition-colors duration-250 ${isActive ? 'text-indigo-400' : ''}`} strokeWidth={1.8} />
+                  <Icon className={`w-[18px] h-[18px] transition-colors duration-250 ${isActive ? 'text-cyan-600' : ''}`} strokeWidth={1.8} />
                   {link.name}
                 </Link>
               )
@@ -62,22 +59,22 @@ function SidebarLayout({ children }) {
 
           {/* User Profile Snippet at Bottom */}
           {user ? (
-            <div className="mt-auto pt-6 border-t border-white/[0.06] flex items-center justify-between">
+            <div className="mt-auto pt-6 border-t border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/[0.06] flex items-center justify-center text-indigo-300 text-sm font-bold shrink-0">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 border border-slate-200 flex items-center justify-center text-cyan-700 text-sm font-bold shrink-0">
                   {user.first_name?.[0] || user.email[0].toUpperCase()}
                 </div>
                 <div className="flex flex-col overflow-hidden min-w-0">
-                  <span className="text-sm font-medium text-zinc-300 truncate">{user.first_name || user.email.split('@')[0]}</span>
-                  <span className="text-xs text-zinc-600 capitalize">{user.role}</span>
+                  <span className="text-sm font-medium text-slate-700 truncate">{user.first_name || user.email.split('@')[0]}</span>
+                  <span className="text-xs text-slate-500 capitalize">{user.role}</span>
                 </div>
               </div>
-              <button onClick={logout} className="p-2 rounded-lg hover:bg-white/[0.04] text-zinc-600 hover:text-rose-400 transition-colors duration-250" title="Log out">
+              <button onClick={logout} className="p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-rose-600 transition-colors duration-250" title="Log out">
                 <LogOut className="w-4 h-4" strokeWidth={1.8} />
               </button>
             </div>
           ) : (
-            <div className="mt-auto pt-6 border-t border-white/[0.06]">
+            <div className="mt-auto pt-6 border-t border-slate-200">
               <Link to="/login" className="btn-primary w-full block text-center py-2.5 rounded-xl text-sm font-medium">
                 Log In
               </Link>
@@ -86,11 +83,11 @@ function SidebarLayout({ children }) {
         </aside>
 
         {/* Mobile Nav Header */}
-        <div className="md:hidden fixed top-0 w-full glass-surface z-30 px-6 py-4 flex items-center justify-between border-b border-white/[0.04]">
-           <Link to="/" className="text-xl font-bold text-white tracking-tight">
+        <div className="md:hidden fixed top-0 w-full glass-surface z-30 px-6 py-4 flex items-center justify-between border-b border-slate-200">
+           <Link to="/" className="text-xl font-bold text-slate-900 tracking-tight">
             Path<span className="gradient-text">Mate</span>
           </Link>
-          <Link to="/dashboard" className="text-zinc-500 hover:text-white transition-colors">
+          <Link to="/dashboard" className="text-slate-500 hover:text-slate-900 transition-colors">
              <LayoutDashboard className="w-5 h-5" strokeWidth={1.8} />
           </Link>
         </div>

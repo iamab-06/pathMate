@@ -80,13 +80,23 @@ from rest_framework.response import Response
 from .models import SessionRequest
 from .serializers import SessionRequestCreateSerializer, SessionRequestSerializer
 
+from .email_utils import send_session_request_email
+
 # 6. Create a session request (mentee → mentor)
 class SessionRequestCreateView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = SessionRequestCreateSerializer
 
     def perform_create(self, serializer):
-        serializer.save(mentee=self.request.user)
+        session_request = serializer.save(mentee=self.request.user)
+        try:
+            send_session_request_email(
+                mentor=session_request.mentor,
+                mentee=session_request.mentee,
+                message_snippet=session_request.message
+            )
+        except Exception as e:
+            print(f"Error triggering email: {e}")
 
 # 7. List session requests for the current user
 class SessionRequestListView(generics.ListAPIView):

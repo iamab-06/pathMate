@@ -33,17 +33,14 @@ function Login() {
         
         {/* Brand Header */}
         <div className="text-center mb-10">
-          <Link to="/" className="inline-flex items-center gap-2.5 text-3xl font-bold text-white tracking-tight">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <span className="text-white text-sm font-black">P</span>
-            </div>
+          <Link to="/" className="inline-block text-3xl font-bold text-slate-900 tracking-tight">
             Path<span className="gradient-text">Mate</span>
           </Link>
         </div>
 
         <div className="glass-floating rounded-2xl p-8">
-          <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Welcome back</h2>
-          <p className="text-zinc-500 mb-8 text-sm">Log in to your PathMate account</p>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">Welcome back</h2>
+          <p className="text-slate-500 mb-8 text-sm">Log in to your PathMate account</p>
 
           {error && (
             <div className="bg-rose-500/10 border border-rose-500/15 text-rose-400 px-4 py-3 rounded-xl mb-6 text-sm">
@@ -53,7 +50,7 @@ function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs text-zinc-500 mb-2 font-medium uppercase tracking-wider">Email</label>
+              <label className="block text-xs text-slate-500 mb-2 font-medium uppercase tracking-wider">Email</label>
               <input
                 type="email"
                 value={email}
@@ -64,7 +61,7 @@ function Login() {
               />
             </div>
             <div>
-              <label className="block text-xs text-zinc-500 mb-2 font-medium uppercase tracking-wider">Password</label>
+              <label className="block text-xs text-slate-500 mb-2 font-medium uppercase tracking-wider">Password</label>
               <input
                 type="password"
                 value={password}
@@ -83,9 +80,9 @@ function Login() {
             </button>
           </form>
 
-          <p className="text-zinc-500 text-sm mt-8 text-center">
+          <p className="text-slate-500 text-sm mt-8 text-center">
             Don't have an account?{' '}
-            <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+            <Link to="/register" className="text-cyan-600 hover:text-cyan-500 font-medium transition-colors">
               Register
             </Link>
           </p>

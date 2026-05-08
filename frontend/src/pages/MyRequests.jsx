@@ -40,11 +40,11 @@ const statusConfig = {
 }
 
 const avatarGradients = [
-  'from-indigo-500 to-purple-500',
-  'from-cyan-500 to-blue-500',
-  'from-pink-500 to-rose-500',
-  'from-emerald-500 to-teal-500',
-  'from-amber-500 to-orange-500',
+  'from-cyan-500 to-emerald-500',
+  'from-sky-500 to-blue-500',
+  'from-teal-500 to-emerald-500',
+  'from-indigo-400 to-cyan-500',
+  'from-amber-400 to-orange-500',
 ]
 
 function MyRequests() {
@@ -89,11 +89,11 @@ function MyRequests() {
   return (
     <div className="flex flex-col max-w-4xl w-full">
       <div className="animate-fade-in mb-10 hero-spotlight">
-        <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest mb-3">Sessions</p>
-        <h1 className="text-4xl font-bold text-white mb-3 tracking-tight leading-[1.1]">
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Sessions</p>
+        <h1 className="text-4xl font-bold text-slate-900 mb-3 tracking-tight leading-[1.1]">
           {isMentor ? 'Incoming Requests' : 'My Requests'}
         </h1>
-        <p className="text-zinc-500 text-base leading-relaxed">
+        <p className="text-slate-500 text-base leading-relaxed">
           {isMentor
             ? 'Mentees who want to connect with you. Accept or decline each request.'
             : 'Track the session requests you\'ve sent to mentors.'}
@@ -106,10 +106,10 @@ function MyRequests() {
           {[1, 2, 3].map(i => (
             <div key={i} className="glass-surface rounded-2xl p-6 animate-pulse">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-white/[0.04]" />
+                <div className="w-12 h-12 rounded-full bg-slate-50" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-white/[0.06] rounded-full w-1/3" />
-                  <div className="h-3 bg-white/[0.03] rounded-full w-1/2" />
+                  <div className="h-4 bg-slate-100 rounded-full w-1/3" />
+                  <div className="h-3 bg-slate-50 rounded-full w-1/2" />
                 </div>
               </div>
             </div>
@@ -131,16 +131,16 @@ function MyRequests() {
       {/* Empty */}
       {!loading && !error && requests.length === 0 && (
         <div className="glass-surface rounded-2xl p-16 text-center animate-fade-in-d1 flex flex-col items-center">
-          <div className="w-16 h-16 rounded-full bg-white/[0.03] border border-white/[0.06] flex items-center justify-center mb-6">
+          <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center mb-6">
             {isMentor
-              ? <Inbox className="w-7 h-7 text-zinc-600" strokeWidth={1.5} />
-              : <Sparkles className="w-7 h-7 text-zinc-600" strokeWidth={1.5} />
+              ? <Inbox className="w-7 h-7 text-slate-400" strokeWidth={1.5} />
+              : <Sparkles className="w-7 h-7 text-slate-400" strokeWidth={1.5} />
             }
           </div>
-          <h3 className="text-white font-bold text-xl mb-3 tracking-tight">
+          <h3 className="text-slate-900 font-bold text-xl mb-3 tracking-tight">
             {isMentor ? 'No requests yet' : 'No requests sent yet'}
           </h3>
-          <p className="text-zinc-500 text-sm mb-8 max-w-md mx-auto leading-relaxed">
+          <p className="text-slate-500 text-sm mb-8 max-w-md mx-auto leading-relaxed">
             {isMentor
               ? 'Once a mentee sends you a request, it will appear here.'
               : 'Find a mentor and send your first session request!'}
@@ -173,29 +173,29 @@ function MyRequests() {
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
                 {/* Subtle top edge */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
                 
                 <div className="flex flex-col sm:flex-row items-start gap-5 relative z-10">
                   {/* Avatar */}
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shrink-0 shadow-lg ring-2 ring-[#09090b]`}>
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shrink-0 shadow-lg ring-2 ring-white`}>
                     {initials}
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0 w-full">
                     <div className="flex items-center justify-between gap-4 mb-1.5 flex-wrap">
-                      <h3 className="text-white font-bold text-lg tracking-tight">{otherName}</h3>
+                      <h3 className="text-slate-900 font-bold text-lg tracking-tight">{otherName}</h3>
                       <span className={`text-[0.65rem] px-2.5 py-1 rounded-full border font-bold uppercase tracking-wider flex items-center gap-1.5 ${status.bg} ${status.text} ${status.border}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${status.dot} ${status.animate ? 'animate-pulse' : ''}`} />
                         {status.label}
                       </span>
                     </div>
-                    <p className="text-zinc-600 text-xs mb-3 font-bold uppercase tracking-widest">{date}</p>
+                    <p className="text-slate-400 text-xs mb-3 font-bold uppercase tracking-widest">{date}</p>
                     
                     {req.message && (
-                      <div className="bg-white/[0.03] border border-white/[0.04] rounded-xl p-3.5 mb-4 relative">
-                        <div className="absolute top-3.5 left-0 w-[2px] h-6 bg-white/10 rounded-r" />
-                        <p className="text-zinc-400 text-sm leading-relaxed italic pl-2">
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 mb-4 relative">
+                        <div className="absolute top-3.5 left-0 w-[2px] h-6 bg-slate-300 rounded-r" />
+                        <p className="text-slate-600 text-sm leading-relaxed italic pl-2">
                           &ldquo;{req.message}&rdquo;
                         </p>
                       </div>
@@ -203,9 +203,9 @@ function MyRequests() {
 
                     {/* Mentor action buttons */}
                     {isMentor && req.status === 'pending' && (
-                      <div className="mt-5 space-y-3 bg-white/[0.02] rounded-xl p-4 border border-white/[0.04]">
+                      <div className="mt-5 space-y-3 bg-slate-50 rounded-xl p-4 border border-slate-200">
                         <div>
-                           <label className="block text-xs font-bold text-zinc-600 uppercase tracking-wider mb-2">Meeting Link (Optional)</label>
+                           <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Meeting Link (Optional)</label>
                            <input
                              type="url"
                              placeholder="e.g. https://meet.google.com/..."
@@ -231,7 +231,7 @@ function MyRequests() {
                       </div>
                     )}
                     {isMentor && req.status === 'accepted' && (
-                      <div className="mt-5 pt-5 border-t border-white/[0.04]">
+                      <div className="mt-5 pt-5 border-t border-slate-200">
                         <button
                           onClick={() => handleUpdateStatus(req.id, 'completed')}
                           className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/15 px-5 py-2.5 rounded-xl text-sm hover:bg-cyan-500/15 transition-all duration-300 font-bold"
@@ -243,18 +243,18 @@ function MyRequests() {
 
                     {/* Mentee meeting link & Review action */}
                     {!isMentor && (req.status === 'accepted' || req.status === 'completed') && (
-                      <div className="mt-5 pt-5 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div className="mt-5 pt-5 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
                         {req.meeting_link ? (
                           <a
                             href={req.meeting_link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-6 py-2.5 rounded-xl font-bold hover:bg-indigo-500/15 transition-all duration-300"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-cyan-500/10 text-cyan-600 border border-cyan-500/20 px-6 py-2.5 rounded-xl font-bold hover:bg-cyan-500/15 transition-all duration-300"
                           >
                             <Video className="w-4 h-4" /> Join Meeting
                           </a>
                         ) : (
-                          <div className="text-zinc-500 text-sm italic">No meeting link provided yet</div>
+                          <div className="text-slate-500 text-sm italic">No meeting link provided yet</div>
                         )}
                         
                         {req.status === 'completed' && req.mentor_profile_id && (
