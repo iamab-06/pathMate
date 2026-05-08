@@ -8,8 +8,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write('Seeding demo data...')
 
-        # 0. Create Superuser for Admin Access
-        admin, admin_created = User.objects.get_or_create(
+        # 0. Create/Update Superuser for Admin Access
+        admin, created = User.objects.update_or_create(
             email='admin@pathmate.com',
             defaults={
                 'username': 'admin@pathmate.com',
@@ -21,8 +21,7 @@ class Command(BaseCommand):
                 'password': make_password('admin1234')
             }
         )
-        if admin_created:
-            self.stdout.write(self.style.SUCCESS('Created Admin: admin@pathmate.com / admin1234'))
+        self.stdout.write(self.style.SUCCESS(f'{"Created" if created else "Updated"} Admin: admin@pathmate.com / admin1234'))
 
         # 1. Create Demo Mentee
         mentee, created = User.objects.get_or_create(
