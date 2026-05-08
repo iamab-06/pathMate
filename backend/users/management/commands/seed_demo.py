@@ -13,14 +13,17 @@ class Command(BaseCommand):
         self.stdout.write('Seeding demo data...')
 
         # 1. Create Demo Mentee
-        mentee = User.objects.create(
+        mentee, created = User.objects.get_or_create(
             email='demo@example.com',
-            first_name='Demo',
-            last_name='User',
-            role='mentee',
-            password=make_password('demo1234')
+            defaults={
+                'first_name': 'Demo',
+                'last_name': 'User',
+                'role': 'mentee',
+                'password': make_password('demo1234')
+            }
         )
-        self.stdout.write(self.style.SUCCESS('Created Mentee: demo@example.com / demo1234'))
+        if created:
+            self.stdout.write(self.style.SUCCESS('Created Mentee: demo@example.com / demo1234'))
 
         # 2. Create Mentors
         mentors_data = [
@@ -29,39 +32,57 @@ class Command(BaseCommand):
                 'first_name': 'Rahul',
                 'last_name': 'Sharma',
                 'role': 'mentor',
-                'company': 'Google',
-                'job_title': 'Senior SWE',
-                'bio': 'Started at a Tier 3 college, hustled to get into FAANG. Happy to share my playbook.',
-                'years_of_experience': 5,
-                'is_profile_completed': True,
+                'profile': {
+                    'company': 'Google',
+                    'experience_years': 5,
+                    'domain': 'Backend Engineering',
+                    'previous_college_tier': '3',
+                    'internship_status': 'none',
+                }
             },
             {
                 'email': 'priya@example.com',
                 'first_name': 'Priya',
                 'last_name': 'Patel',
                 'role': 'mentor',
-                'company': 'Microsoft',
-                'job_title': 'Product Manager',
-                'bio': 'Transitioned from a service-based IT company to product management. Let me help you break out.',
-                'years_of_experience': 4,
-                'is_profile_completed': True,
+                'profile': {
+                    'company': 'Microsoft',
+                    'experience_years': 4,
+                    'domain': 'Product Management',
+                    'previous_college_tier': '2',
+                    'internship_status': 'startup',
+                }
             },
             {
                 'email': 'amit@example.com',
                 'first_name': 'Amit',
                 'last_name': 'Kumar',
                 'role': 'mentor',
-                'company': 'Stripe',
-                'job_title': 'Backend Engineer',
-                'bio': 'Specialist in distributed systems. If you want to crack hard engineering interviews, I can help.',
-                'years_of_experience': 7,
-                'is_profile_completed': True,
+                'profile': {
+                    'company': 'Stripe',
+                    'experience_years': 7,
+                    'domain': 'Systems Engineering',
+                    'previous_college_tier': '1',
+                    'internship_status': 'mass',
+                }
             }
         ]
 
+        from users.models import MentorProfile
+
         for data in mentors_data:
-            data['password'] = make_password('demo1234')
-            User.objects.create(**data)
-            self.stdout.write(self.style.SUCCESS(f"Created Mentor: {data['email']} / demo1234"))
+            profile_data = data.pop('profile')
+            user, created = User.objects.get_or_create(
+                email=data['email'],
+                defaults={
+                    'first_name': data['first_name'],
+                    'last_name': data['last_name'],
+                    'role': data['role'],
+                    'password': make_password('demo1234')
+                }
+            )
+            if created:
+                MentorProfile.objects.create(user=user, **profile_data)
+                self.stdout.write(self.style.SUCCESS(f"Created Mentor: {data['email']} / demo1234"))
 
         self.stdout.write(self.style.SUCCESS('Demo data seeding complete!'))
