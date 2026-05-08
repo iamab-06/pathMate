@@ -23,8 +23,8 @@ class Command(BaseCommand):
         )
         self.stdout.write(self.style.SUCCESS(f'{"Created" if created else "Updated"} Admin: admin@pathmate.com / admin1234'))
 
-        # 1. Create Demo Mentee
-        mentee, created = User.objects.get_or_create(
+        # 1. Create/Update Demo Mentee
+        mentee, created = User.objects.update_or_create(
             email='demo@example.com',
             defaults={
                 'username': 'demo@example.com',
@@ -34,10 +34,9 @@ class Command(BaseCommand):
                 'password': make_password('demo1234')
             }
         )
-        if created:
-            self.stdout.write(self.style.SUCCESS('Created Mentee: demo@example.com / demo1234'))
+        self.stdout.write(self.style.SUCCESS(f'{"Created" if created else "Updated"} Mentee: demo@example.com / demo1234'))
 
-        # 2. Create Mentors
+        # 2. Create/Update Mentors
         mentors_data = [
             {
                 'email': 'rahul@example.com',
@@ -87,7 +86,7 @@ class Command(BaseCommand):
 
         for data in mentors_data:
             profile_data = data.pop('profile')
-            user, created = User.objects.get_or_create(
+            user, created = User.objects.update_or_create(
                 email=data['email'],
                 defaults={
                     'username': data['username'],
@@ -97,8 +96,8 @@ class Command(BaseCommand):
                     'password': make_password('demo1234')
                 }
             )
-            if created:
-                MentorProfile.objects.create(user=user, **profile_data)
-                self.stdout.write(self.style.SUCCESS(f"Created Mentor: {data['email']} / demo1234"))
+            # Ensure profile exists and is updated
+            MentorProfile.objects.update_or_create(user=user, defaults=profile_data)
+            self.stdout.write(self.style.SUCCESS(f'{"Created" if created else "Updated"} Mentor: {data["email"]} / demo1234'))
 
         self.stdout.write(self.style.SUCCESS('Demo data seeding complete!'))
