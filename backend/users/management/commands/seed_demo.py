@@ -6,11 +6,23 @@ class Command(BaseCommand):
     help = 'Seeds the database with realistic demo data for MentorBridge'
 
     def handle(self, *args, **options):
-        if User.objects.filter(email='demo@example.com').exists():
-            self.stdout.write(self.style.WARNING('Database is already seeded with demo data.'))
-            return
-
         self.stdout.write('Seeding demo data...')
+
+        # 0. Create Superuser for Admin Access
+        admin, admin_created = User.objects.get_or_create(
+            email='admin@pathmate.com',
+            defaults={
+                'username': 'admin@pathmate.com',
+                'first_name': 'Super',
+                'last_name': 'Admin',
+                'role': 'mentor',
+                'is_staff': True,
+                'is_superuser': True,
+                'password': make_password('admin1234')
+            }
+        )
+        if admin_created:
+            self.stdout.write(self.style.SUCCESS('Created Admin: admin@pathmate.com / admin1234'))
 
         # 1. Create Demo Mentee
         mentee, created = User.objects.get_or_create(
