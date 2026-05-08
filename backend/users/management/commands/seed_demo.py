@@ -1,36 +1,49 @@
+import sys
 from django.core.management.base import BaseCommand
-from users.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+import os
+
+User = get_user_model()
 
 class Command(BaseCommand):
     help = 'Seeds the database with realistic demo data for MentorBridge'
 
     def handle(self, *args, **options):
-        self.stdout.write('NUCLEAR RESET: Wiping old user data...')
-        User.objects.all().delete()
-        self.stdout.write('Database cleared.')
-
+        # self.stdout.write('NUCLEAR RESET: Wiping old user data...')
+        # User.objects.all().delete()
+        # self.stdout.write('Database cleared.')
+        self.stdout.write('Seeding demo data...')
+        
         # 0. Create Superuser for Admin Access
-        User.objects.create_superuser(
+        admin, created = User.objects.get_or_create(
             email='admin@pathmate.com',
             username='admin@pathmate.com',
-            password='admin1234',
-            first_name='Super',
-            last_name='Admin',
-            role='mentor'
+            defaults={
+                'password': make_password('admin1234'),
+                'first_name': 'Super',
+                'last_name': 'Admin',
+                'role': 'mentor',
+                'is_staff': True,
+                'is_superuser': True,
+            }
         )
-        self.stdout.write(self.style.SUCCESS('Created Admin: admin@pathmate.com / admin1234'))
+        if created:
+            self.stdout.write(self.style.SUCCESS('Created Admin: admin@pathmate.com / admin1234'))
 
         # 1. Create Demo Mentee
-        User.objects.create_user(
+        mentee, created = User.objects.get_or_create(
             email='demo@example.com',
             username='demo@example.com',
-            password='demo1234',
-            first_name='Demo',
-            last_name='User',
-            role='mentee'
+            defaults={
+                'password': make_password('demo1234'),
+                'first_name': 'Demo',
+                'last_name': 'User',
+                'role': 'mentee'
+            }
         )
-        self.stdout.write(self.style.SUCCESS('Created Mentee: demo@example.com / demo1234'))
+        if created:
+            self.stdout.write(self.style.SUCCESS('Created Mentee: demo@example.com / demo1234'))
 
         # 2. Create Mentors
         mentors_data = [
@@ -82,15 +95,18 @@ class Command(BaseCommand):
 
         for data in mentors_data:
             profile_data = data.pop('profile')
-            user = User.objects.create_user(
+            user, created = User.objects.get_or_create(
                 email=data['email'],
                 username=data['username'],
-                password='demo1234',
-                first_name=data['first_name'],
-                last_name=data['last_name'],
-                role=data['role']
+                defaults={
+                    'password': make_password('demo1234'),
+                    'first_name': data['first_name'],
+                    'last_name': data['last_name'],
+                    'role': data['role']
+                }
             )
-            MentorProfile.objects.create(user=user, **profile_data)
-            self.stdout.write(self.style.SUCCESS(f'Created Mentor: {data["email"]} / demo1234'))
+            if created:
+                MentorProfile.objects.create(user=user, **profile_data)
+                self.stdout.write(self.style.SUCCESS(f'Created Mentor: {data["email"]} / demo1234'))
 
-        self.stdout.write(self.style.SUCCESS('Nuclear seeding complete!'))
+        self.stdout.write(self.style.SUCCESS('Seeding complete!'))
