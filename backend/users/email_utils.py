@@ -6,16 +6,17 @@ from django.conf import settings
 
 def _send_email_async(subject, message, recipient_list, html_message):
     try:
-        send_mail(
+        result = send_mail(
             subject=subject,
             message=message,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=recipient_list,
             html_message=html_message,
-            fail_silently=True,
+            fail_silently=False,
         )
+        print(f"Async email sent successfully to {recipient_list}. Result: {result}")
     except Exception as e:
-        print(f"Async email sending failed: {e}")
+        print(f"Async email sending failed to {recipient_list}: {e}")
 
 def send_session_request_email(mentor, mentee, message_snippet, frontend_url="https://path-mate-three.vercel.app"):
     """
