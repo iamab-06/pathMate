@@ -16,6 +16,7 @@ class Command(BaseCommand):
         mentee, created = User.objects.get_or_create(
             email='demo@example.com',
             defaults={
+                'username': 'demo@example.com',
                 'first_name': 'Demo',
                 'last_name': 'User',
                 'role': 'mentee',
@@ -29,6 +30,7 @@ class Command(BaseCommand):
         mentors_data = [
             {
                 'email': 'rahul@example.com',
+                'username': 'rahul@example.com',
                 'first_name': 'Rahul',
                 'last_name': 'Sharma',
                 'role': 'mentor',
@@ -42,6 +44,7 @@ class Command(BaseCommand):
             },
             {
                 'email': 'priya@example.com',
+                'username': 'priya@example.com',
                 'first_name': 'Priya',
                 'last_name': 'Patel',
                 'role': 'mentor',
@@ -55,6 +58,7 @@ class Command(BaseCommand):
             },
             {
                 'email': 'amit@example.com',
+                'username': 'amit@example.com',
                 'first_name': 'Amit',
                 'last_name': 'Kumar',
                 'role': 'mentor',
@@ -75,6 +79,7 @@ class Command(BaseCommand):
             user, created = User.objects.get_or_create(
                 email=data['email'],
                 defaults={
+                    'username': data['username'],
                     'first_name': data['first_name'],
                     'last_name': data['last_name'],
                     'role': data['role'],
