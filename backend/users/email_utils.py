@@ -1,11 +1,31 @@
+import logging
 import threading
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 
+logger = logging.getLogger(__name__)
+
 def _send_email_async(subject, message, recipient_list, html_message):
     try:
+        # Log the email config being used (mask password)
+        logger.info(
+            f"Attempting email send — HOST={settings.EMAIL_HOST}, "
+            f"PORT={settings.EMAIL_PORT}, SSL={settings.EMAIL_USE_SSL}, "
+            f"TLS={settings.EMAIL_USE_TLS}, "
+            f"USER={'(set)' if settings.EMAIL_HOST_USER else '(EMPTY!)'}, "
+            f"PASS={'(set)' if settings.EMAIL_HOST_PASSWORD else '(EMPTY!)'}, "
+            f"TO={recipient_list}"
+        )
+
+        if not settings.EMAIL_HOST_USER or not settings.EMAIL_HOST_PASSWORD:
+            logger.error(
+                "EMAIL_HOST_USER or EMAIL_HOST_PASSWORD is empty! "
+                "Set these environment variables on your hosting platform (Render)."
+            )
+            return
+
         result = send_mail(
             subject=subject,
             message=message,
@@ -14,9 +34,9 @@ def _send_email_async(subject, message, recipient_list, html_message):
             html_message=html_message,
             fail_silently=False,
         )
-        print(f"Async email sent successfully to {recipient_list}. Result: {result}")
+        logger.info(f"Email sent successfully to {recipient_list}. Result: {result}")
     except Exception as e:
-        print(f"Async email sending failed to {recipient_list}: {e}")
+        logger.error(f"Email sending FAILED to {recipient_list}: {type(e).__name__}: {e}", exc_info=True)
 
 def send_session_request_email(mentor, mentee, message_snippet, frontend_url="https://path-mate-three.vercel.app"):
     """
@@ -37,6 +57,8 @@ def send_session_request_email(mentor, mentee, message_snippet, frontend_url="ht
     # Start the email sending in a background thread
     thread = threading.Thread(
         target=_send_email_async,
-        args=(subject, plain_message, [mentor.email], html_message)
+        args=(subject, plain_message, [mentor.email], html_message),
+        daemon=True,
     )
     thread.start()
+    logger.info(f"Email thread started for mentor {mentor.email}")
