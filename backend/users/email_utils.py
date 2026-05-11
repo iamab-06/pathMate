@@ -1,42 +1,56 @@
 import logging
 import threading
-from django.core.mail import send_mail
+import json
+import urllib.request
+import urllib.error
+import os
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
 def _send_email_async(subject, message, recipient_list, html_message):
     try:
-        # Log the email config being used (mask password)
-        logger.info(
-            f"Attempting email send — HOST={settings.EMAIL_HOST}, "
-            f"PORT={settings.EMAIL_PORT}, SSL={settings.EMAIL_USE_SSL}, "
-            f"TLS={settings.EMAIL_USE_TLS}, "
-            f"USER={'(set)' if settings.EMAIL_HOST_USER else '(EMPTY!)'}, "
-            f"PASS={'(set)' if settings.EMAIL_HOST_PASSWORD else '(EMPTY!)'}, "
-            f"TO={recipient_list}"
-        )
-
-        if not settings.EMAIL_HOST_USER or not settings.EMAIL_HOST_PASSWORD:
-            logger.error(
-                "EMAIL_HOST_USER or EMAIL_HOST_PASSWORD is empty! "
-                "Set these environment variables on your hosting platform (Render)."
-            )
+        logger.info(f"Attempting to send email via Brevo HTTP API to {recipient_list}")
+        
+        url = "https://api.brevo.com/v3/smtp/email"
+        
+        # We rely on the environment variable BREVO_API_KEY being set in Render
+        api_key = os.getenv("BREVO_API_KEY")
+        if not api_key:
+            logger.error("BREVO_API_KEY environment variable is not set!")
             return
-
-        result = send_mail(
-            subject=subject,
-            message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=recipient_list,
-            html_message=html_message,
-            fail_silently=False,
+        
+        payload = {
+            "sender": {"email": "savagesport123@gmail.com", "name": "PathMate"},
+            "to": [{"email": email} for email in recipient_list],
+            "subject": subject,
+            "htmlContent": html_message,
+            "textContent": message
+        }
+        
+        data = json.dumps(payload).encode('utf-8')
+        
+        req = urllib.request.Request(
+            url, 
+            data=data, 
+            headers={
+                "accept": "application/json",
+                "api-key": api_key,
+                "content-type": "application/json"
+            },
+            method="POST"
         )
-        logger.info(f"Email sent successfully to {recipient_list}. Result: {result}")
+        
+        with urllib.request.urlopen(req) as response:
+            response_data = response.read().decode('utf-8')
+            logger.info(f"Brevo HTTP API Email sent successfully to {recipient_list}. Response: {response_data}")
+            
+    except urllib.error.HTTPError as e:
+        error_msg = e.read().decode('utf-8')
+        logger.error(f"Brevo HTTP API Email FAILED to {recipient_list}. Status: {e.code}, Error: {error_msg}")
     except Exception as e:
-        logger.error(f"Email sending FAILED to {recipient_list}: {type(e).__name__}: {e}", exc_info=True)
+        logger.error(f"Brevo HTTP API Email FAILED to {recipient_list}: {type(e).__name__}: {e}", exc_info=True)
 
 def send_session_request_email(mentor, mentee, message_snippet, frontend_url="https://path-mate-three.vercel.app"):
     """
@@ -61,4 +75,4 @@ def send_session_request_email(mentor, mentee, message_snippet, frontend_url="ht
         daemon=True,
     )
     thread.start()
-    logger.info(f"Email thread started for mentor {mentor.email}")
+    logger.info(f"Brevo Email thread started for mentor {mentor.email}")
